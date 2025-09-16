@@ -1,4 +1,4 @@
-## Football Play Highlights 🎥
+## Centennial Plays 🎥
 
 ### Example Play 1
 <video width="320" height="240" controls>
