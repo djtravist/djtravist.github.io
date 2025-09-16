@@ -1,7 +1,12 @@
-## Centennial Plays 🎥
+# Centennial Plays 🎥
 
-### Example Play 1  
-[![Play 1](thumbnails/play1.png)](IMG_3936.mp4)
+Welcome to the Centennial football highlight repo!  
 
-### Example Play 2  
-[![Play 2](thumbnails/play2.png)](plays/play2.mp4)
+All plays are available to watch on our **GitHub Pages site** with inline video playback:  
+
+👉 [Watch the Plays Here](https://djtravist.github.io/)  
+
+---
+
+### About
+This repo stores video highlights in the `plays/` folder and serves them on GitHub Pages using a custom `index.html`.
