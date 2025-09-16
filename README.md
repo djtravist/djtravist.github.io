@@ -1,13 +1,7 @@
 ## Centennial Plays 🎥
 
-### Example Play 1
-<video width="320" height="240" controls>
-  <source src="IMG_3936.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+### Example Play 1  
+[![Play 1](thumbnails/play1.png)](IMG_3936.mp4)
 
-### Example Play 2
-<video width="320" height="240" controls>
-  <source src="plays/play2.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+### Example Play 2  
+[![Play 2](thumbnails/play2.png)](plays/play2.mp4)
