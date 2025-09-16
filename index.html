@@ -1,17 +1,50 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Centennial Plays 🎥</title>
-  </head>
-  <body>
-    <h2>Example Play 1</h2>
-    <video width="320" height="240" controls>
-      <source src="IMG_3936.mp4" type="video/mp4">
-    </video>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Centennial Plays 🎥</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background: #f9f9f9;
+      color: #333;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .play {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    video {
+      border: 2px solid #333;
+      border-radius: 8px;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <h1>Centennial Plays 🎥</h1>
 
-    <h2>Example Play 2</h2>
-    <video width="320" height="240" controls>
-      <source src="VID_20250515_132110032.mp4" type="video/mp4">
+  <div class="play">
+    <h2>Example Play 1</h2>
+    <video width="480" height="270" controls autoplay muted playsinline>
+      <source src="IMG_3936.mp4" type="video/mp4">
+      Your browser does not support the video tag.
     </video>
-  </body>
+  </div>
+
+  <div class="play">
+    <h2>Example Play 2</h2>
+    <video width="480" height="270" controls autoplay muted playsinline>
+      <source src="plays/play2.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+
+</body>
 </html>
