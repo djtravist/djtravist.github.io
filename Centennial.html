@@ -524,46 +524,26 @@
   <div class="counter" id="counter-Centennial69"></div>
 
   <!-- Script to handle counters -->
-  <script>
-    const totalVideos = 69;
-    const baseUrl = "https://djtravist.github.io/centennial"; // change this to your site URL
+<script>
+  const totalVideos = 69;
+  for (let i = 1; i <= totalVideos; i++) {
+    const num = i.toString().padStart(2, "0");
+    const img = document.createElement("img");
+    img.src = `https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://djtravist.github.io/centennial/Centennial${num}&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=views&edge_flat=false`;
+    img.style.display = "none";
+    img.id = `counter-Centennial${num}`;
+    document.getElementById(`counter-Centennial${num}`).appendChild(img);
 
-    for (let i = 1; i <= totalVideos; i++) {
-      const num = i.toString().padStart(2, "0");
-      document.write(`
-        <h2>Centennial ${i}</h2>
-        <video controls width="640">
-          <source src="centennial/Centennial ${num}.mp4" type="video/mp4" />
-        </video>
-        <div class="counter">
-          Views: <span id="views-Centennial${num}">0</span>
-          <img id="counter-Centennial${num}" 
-               src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=${encodeURIComponent(baseUrl + '/Centennial' + num)}&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=views&edge_flat=false"
-               style="display:none;"
-               alt="counter for Centennial ${num}">
-        </div>
-      `);
-    }
+    img.addEventListener("load", () => {
+      fetch(img.src)
+        .then(res => res.text())
+        .then(svg => {
+          const match = svg.match(/>(\d+)<\/text>/);
+          if (match) {
+            document.getElementById(`counter-Centennial${num}`).innerHTML = `Views: ${match[1]}`;
+          }
+        });
+    });
+  }
+</script>
 
-    function updateCounter(imgId, spanId) {
-      const img = document.getElementById(imgId);
-      img.addEventListener("load", () => {
-        fetch(img.src)
-          .then(res => res.text())
-          .then(svg => {
-            const match = svg.match(/>(\\d+)<\\/text>/);
-            if (match) {
-              document.getElementById(spanId).textContent = match[1];
-            }
-          });
-      });
-    }
-
-    for (let i = 1; i <= totalVideos; i++) {
-      const num = i.toString().padStart(2, "0");
-      updateCounter(`counter-Centennial${num}`, `views-Centennial${num}`);
-    }
-  </script>
-
-</body>
-</html>
