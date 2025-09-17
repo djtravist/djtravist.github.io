@@ -31,7 +31,7 @@
   <h1>Videos for your viewing pleasure!🎥</h1>
 
   <div class="play">
-    <h2>Test 1</h2>
+    <h2>Loading…</h2>
     <video width="480" height="270" controls autoplay muted playsinline>
       <source src="IMG_3936.MP4" type="video/mp4">
       Your browser does not support the video tag.
@@ -39,12 +39,23 @@
   </div>
 
   <div class="play">
-    <h2>Test 2</h2>
+    <h2>Loading…</h2>
     <video width="480" height="270" controls autoplay muted playsinline>
       <source src="VID_20250515_132110032.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
   </div>
+
+  <script>
+    // Set the <h2> title based on the video filename (without .mp4)
+    document.querySelectorAll('.play').forEach(playDiv => {
+      const video = playDiv.querySelector('video source');
+      if (video) {
+        const fileName = video.src.split('/').pop().replace(/\.mp4$/i, '');
+        playDiv.querySelector('h2').textContent = fileName;
+      }
+    });
+  </script>
 
 </body>
 </html>
