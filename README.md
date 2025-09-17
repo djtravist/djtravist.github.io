@@ -4,7 +4,7 @@ Welcome to the Centennial football highlight repo!
 
 All plays are available to watch on our **GitHub Pages site** with inline video playback:  
 
-👉 [Watch the Plays Here](https://djtravist.github.io/)  
+👉 [Centennial](https://djtravist.github.io/Centennial)  
 
 ---
 
