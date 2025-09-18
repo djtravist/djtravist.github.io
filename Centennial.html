@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
+
   <meta charset="UTF-8" />
   <title>Varsity Game Videos</title>
   <style>
@@ -32,34 +36,75 @@
 
   <div id="videoContainer"></div>
 
-  <script>
-    // ======= CONFIGURATION =======
-    const folderName = 'centennial'; // Change to your folder name
-    const videoPrefix = 'Centennial'; // Change to your filename prefix
-    const totalVideos = 69; // Change to the number of videos
-    // ==============================
+<script>
+  // Your Firebase config
+  const firebaseConfig = {
+    apiKey: "AIzaSyXXXXXXX",
+    authDomain: "your-app.firebaseapp.com",
+    projectId: "your-app",
+    storageBucket: "your-app.appspot.com",
+    messagingSenderId: "1234567890",
+    appId: "1:1234567890:web:abcdef123456"
+  };
 
-    const container = document.getElementById('videoContainer');
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-    for (let i = 1; i <= totalVideos; i++) {
-      const h2 = document.createElement('h2');
-      h2.textContent = `${videoPrefix} ${i}`;
+  const folderName = 'centennial';
+  const videoPrefix = 'Centennial';
+  const totalVideos = 69;
 
-      const video = document.createElement('video');
-      video.controls = true;
-      video.width = 640;
+  const container = document.getElementById('videoContainer');
 
-      const source = document.createElement('source');
-      const padded = String(i).padStart(2, '0'); // ensures 01, 02, etc.
-      source.src = `${folderName}/${videoPrefix}_${padded}.mp4`;
-      source.type = 'video/mp4';
+  for (let i = 1; i <= totalVideos; i++) {
+    const padded = String(i).padStart(2, '0');
+    const videoId = `${videoPrefix}_${padded}`;
 
-      video.appendChild(source);
-      video.appendChild(document.createTextNode('Your browser does not support the video tag.'));
+    const h2 = document.createElement('h2');
+    h2.textContent = `${videoPrefix} ${i}`;
 
-      container.appendChild(h2);
-      container.appendChild(video);
-    }
-  </script>
+    const counter = document.createElement('div');
+    counter.textContent = `Loading plays...`;
+    counter.style.fontSize = '0.9em';
+    counter.style.color = '#666';
+
+    const video = document.createElement('video');
+    video.controls = true;
+    video.width = 640;
+
+    const source = document.createElement('source');
+    source.src = `${folderName}/${videoId}.mp4`;
+    source.type = 'video/mp4';
+
+    video.appendChild(source);
+    video.appendChild(document.createTextNode('Your browser does not support the video tag.'));
+
+    // 🔼 Get current play count
+    db.collection("videoPlays").doc(videoId).get().then((doc) => {
+      if (doc.exists) {
+        counter.textContent = `Plays: ${doc.data().count}`;
+      } else {
+        counter.textContent = `Plays: 0`;
+      }
+    });
+
+    // 🔼 On play, increment count
+    video.addEventListener('play', () => {
+      const ref = db.collection("videoPlays").doc(videoId);
+      db.runTransaction((transaction) => {
+        return transaction.get(ref).then((doc) => {
+          const newCount = (doc.exists ? doc.data().count : 0) + 1;
+          transaction.set(ref, { count: newCount });
+          counter.textContent = `Plays: ${newCount}`;
+        });
+      });
+    });
+
+    container.appendChild(h2);
+    container.appendChild(counter);
+    container.appendChild(video);
+  }
+</script>
 </body>
 </html>
