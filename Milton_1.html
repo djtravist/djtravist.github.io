@@ -34,32 +34,33 @@
 
   <script>
     // ======= CONFIGURATION =======
-    const folderName = 'milton_1'; // Change to your folder name
-    const videoPrefix = 'Milton_1'; // Change to your filename prefix
-    const totalVideos = 80; // Change to the number of videos
-    // ==============================
+const folderName = 'milton_1'; // Folder name
+const videoPrefix = 'Milton_1'; // Used in the actual file path
+const displayTitle = videoPrefix.split('_')[0]; // Removes "_1" for title display
+const totalVideos = 80;
 
-    const container = document.getElementById('videoContainer');
+const container = document.getElementById('videoContainer');
 
-    for (let i = 1; i <= totalVideos; i++) {
-      const h2 = document.createElement('h2');
-      h2.textContent = `${videoPrefix} ${i}`;
+for (let i = 1; i <= totalVideos; i++) {
+  const h2 = document.createElement('h2');
+  h2.textContent = `${displayTitle} ${i}`; // Display title without "_1"
 
-      const video = document.createElement('video');
-      video.controls = true;
-      video.width = 640;
+  const video = document.createElement('video');
+  video.controls = true;
+  video.width = 640;
 
-      const source = document.createElement('source');
-      const padded = String(i).padStart(2, '0'); // ensures 01, 02, etc.
-      source.src = `${folderName}/${videoPrefix}${padded}.mp4`;
-      source.type = 'video/mp4';
+  const source = document.createElement('source');
+  const padded = String(i).padStart(2, '0');
+  source.src = `${folderName}/${videoPrefix}${padded}.mp4`;
+  source.type = 'video/mp4';
 
-      video.appendChild(source);
-      video.appendChild(document.createTextNode('Your browser does not support the video tag.'));
+  video.appendChild(source);
+  video.appendChild(document.createTextNode('Your browser does not support the video tag.'));
 
-      container.appendChild(h2);
-      container.appendChild(video);
-    }
+  container.appendChild(h2);
+  container.appendChild(video);
+}
+
   </script>
 </body>
 </html>
