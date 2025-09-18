@@ -16,12 +16,12 @@
       /* White page background behind PNG tiles */
       background-color: #ffffff;
 
-      /* PNG tiled background (your small logo/paw) */
+      /* PNG tiled background (small logo/paw) */
       background-image: url('grizzlies_paw.png');
       background-repeat: repeat;         /* repeat the PNG across page */
       background-position: 0 0;         /* start tiling from top-left */
       background-size: 8vw auto;        /* responsive tile width, keeps aspect ratio */
-      background-attachment: fixed;      /* background stays fixed on scroll */
+      background-attachment: fixed;     /* background stays fixed on scroll */
 
       /* Flexbox layout to center horizontally, stick content to top */
       display: flex;
@@ -45,9 +45,9 @@
     /* Page title */
     h1 {
       margin-bottom: 20px;              /* spacing below title */
-      font-size: 1.5rem;                /* larger title text */
+      font-size: 2.5rem;                /* large, readable title */
       color: #ffffff;                    /* white text for contrast */
-      line-height: 1.5;                  /* better spacing for multi-line titles */
+      line-height: 1.2;                  /* spacing for multi-line titles */
     }
 
     /* Container for all links/buttons */
@@ -58,13 +58,13 @@
 
     /* Individual clickable links/buttons */
     .link-list a {
-      display: block;                    /* make links block-level so full width is clickable */
-      padding: 12px;                     /* inner spacing for click area */
+      display: block;                    /* full width clickable */
+      padding: 12px;                     /* inner spacing */
       text-decoration: none;             /* remove underline */
       background: #355E3B;               /* hunter green background */
       color: white;                      /* text color */
       font-weight: bold;                 /* bold text */
-      font-size: 2.5rem;                 /* readable font size for links */
+      font-size: 1.5rem;                 /* readable link text */
       border-radius: 8px;                /* rounded corners */
       transition: background 0.3s;       /* smooth hover transition */
     }
@@ -74,13 +74,13 @@
       background: #4C7C50;               /* slightly lighter green on hover */
     }
 
-    /* Optional: Responsive adjustments for smaller screens */
+    /* Responsive adjustments for smaller screens */
     @media (max-width: 480px) {
       h1 {
         font-size: 2rem;                 /* smaller title on phones */
       }
       .link-list a {
-        font-size: 1.5rem;                 /* slightly smaller links on mobile */
+        font-size: 1.2rem;               /* slightly smaller links on mobile */
         padding: 10px;                   /* reduce padding for smaller screens */
       }
     }
