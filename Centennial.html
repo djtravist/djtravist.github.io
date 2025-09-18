@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- ✅ Firebase SDKs for compat mode (v8-style) -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
@@ -19,14 +18,13 @@
       margin-bottom: 1em;
     }
 
-    /* Wrapper around each video block */
     .video-wrapper {
       display: inline-block;
       margin: 2em auto;
       text-align: center;
+      max-width: 90%; /* optional to ensure responsiveness */
     }
 
-    /* Title above the video */
     .video-title {
       margin-bottom: 0.5em;
       font-size: 1.2em;
@@ -34,17 +32,16 @@
       color: #333;
     }
 
-    /* The video element */
     video {
       display: block;
-      max-width: 100%;
+      width: 100%; /* fill parent */
+      max-width: 640px;
       height: auto;
       border: 1px solid #ccc;
       background: #000;
       margin: 0 auto;
     }
 
-    /* Views counter below the video */
     .video-views {
       text-align: right;
       font-size: 0.8em;
@@ -59,85 +56,83 @@
 
   <div id="videoContainer"></div>
 
-<script>
-  // ✅ Your Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyBPJGqsH_pLXffDt6ol3SOxgC9joKUdKm4",
-    authDomain: "footballvideocounter.firebaseapp.com",
-    projectId: "footballvideocounter",
-    storageBucket: "footballvideocounter.firebasestorage.app",
-    messagingSenderId: "126776947656",
-    appId: "1:126776947656:web:cf05806375edaa3c27c6fd"
-  };
+  <script>
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBPJGqsH_pLXffDt6ol3SOxgC9joKUdKm4",
+      authDomain: "footballvideocounter.firebaseapp.com",
+      projectId: "footballvideocounter",
+      storageBucket: "footballvideocounter.firebasestorage.app",
+      messagingSenderId: "126776947656",
+      appId: "1:126776947656:web:cf05806375edaa3c27c6fd"
+    };
 
-  // ✅ Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
-  const folderName = 'centennial';
-  const videoPrefix = 'Centennial';
-  const totalVideos = 69;
+    const folderName = 'centennial';
+    const videoPrefix = 'Centennial';
+    const totalVideos = 69;
 
-  const container = document.getElementById('videoContainer');
+    const container = document.getElementById('videoContainer');
 
-  for (let i = 1; i <= totalVideos; i++) {
-    const padded = String(i).padStart(2, '0');
-    const videoId = `${videoPrefix}_${padded}`;
+    for (let i = 1; i <= totalVideos; i++) {
+      const padded = String(i).padStart(2, '0');
+      const videoId = `${videoPrefix}_${padded}`;
+      console.log("Processing video:", videoId);
 
-    // Wrapper
-    const wrapper = document.createElement('div');
-    wrapper.className = 'video-wrapper';
+      const wrapper = document.createElement('div');
+      wrapper.className = 'video-wrapper';
 
-    // Title above the video
-    const title = document.createElement('div');
-    title.className = 'video-title';
-    title.textContent = `${videoPrefix} ${i}`;
+      const title = document.createElement('div');
+      title.className = 'video-title';
+      title.textContent = `${videoPrefix} ${i}`;
 
-    // Video
-    const video = document.createElement('video');
-    video.controls = true;
-    video.width = 640;
+      const video = document.createElement('video');
+      video.controls = true;
 
-    const source = document.createElement('source');
-    source.src = `${folderName}/${videoId}.mp4`;
-    source.type = 'video/mp4';
+      const source = document.createElement('source');
+      source.src = `${folderName}/${videoId}.mp4`;
+      source.type = 'video/mp4';
 
-    video.appendChild(source);
-    video.appendChild(document.createTextNode('Your browser does not support the video tag.'));
+      video.appendChild(source);
+      video.appendChild(document.createTextNode('Your browser does not support the video tag.'));
 
-    // Views counter (below video)
-    const counter = document.createElement('div');
-    counter.className = 'video-views';
-    counter.textContent = `Loading views...`;
+      const counter = document.createElement('div');
+      counter.className = 'video-views';
+      counter.textContent = `Loading views...`;
 
-    // 🔼 Get current play count
-    db.collection("videoPlays").doc(videoId).get().then((doc) => {
-      if (doc.exists) {
-        counter.textContent = `Views: ${doc.data().count}`;
-      } else {
-        counter.textContent = `Views: 0`;
-      }
-    });
+      // fetch view count
+      db.collection("videoPlays").doc(videoId).get().then((doc) => {
+        if (doc.exists) {
+          counter.textContent = `Views: ${doc.data().count}`;
+        } else {
+          counter.textContent = `Views: 0`;
+        }
+      }).catch((err) => {
+        console.error("Error fetching view count for", videoId, err);
+        counter.textContent = 'Views: N/A';
+      });
 
-    // 🔼 On play, increment count
-    video.addEventListener('play', () => {
-      const ref = db.collection("videoPlays").doc(videoId);
-      db.runTransaction((transaction) => {
-        return transaction.get(ref).then((doc) => {
-          const newCount = (doc.exists ? doc.data().count : 0) + 1;
-          transaction.set(ref, { count: newCount });
-          counter.textContent = `Views: ${newCount}`;
+      video.addEventListener('play', () => {
+        const ref = db.collection("videoPlays").doc(videoId);
+        db.runTransaction((transaction) => {
+          return transaction.get(ref).then((doc) => {
+            const newCount = (doc.exists ? doc.data().count : 0) + 1;
+            transaction.set(ref, { count: newCount });
+            counter.textContent = `Views: ${newCount}`;
+          });
+        }).catch((err) => {
+          console.error("Error incrementing view count for", videoId, err);
         });
       });
-    });
 
-    // Put it all together
-    wrapper.appendChild(title);
-    wrapper.appendChild(video);
-    wrapper.appendChild(counter);
+      wrapper.appendChild(title);
+      wrapper.appendChild(video);
+      wrapper.appendChild(counter);
 
-    container.appendChild(wrapper);
-  }
-</script>
+      container.appendChild(wrapper);
+    }
+  </script>
 </body>
 </html>
