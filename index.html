@@ -4,18 +4,62 @@
   <meta charset="UTF-8" />
   <title>Creekview Grizzlies 8th Grade Football</title>
   <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      text-align: center;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      max-width: 500px;
+      width: 90%;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      color: #003366;
+    }
+
+    .link-list {
+      display: grid;
+      gap: 12px;
+    }
+
     .link-list a {
       display: block;
-      text-align: left;
-      margin-bottom: 5px;
+      padding: 12px;
+      text-decoration: none;
+      background: #00509e;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .link-list a:hover {
+      background: #0074d9;
     }
   </style>
 </head>
 <body>
 
-  <div class="link-list">
-    <a href="Centennial.html">Centennial 9-13-2025</a>
-    <a href="Milton_1.html">Milton 9-17-2025</a>
+  <div class="container">
+    <h1>Creekview Grizzlies<br>8th Grade Football</h1>
+    <div class="link-list">
+      <a href="Centennial.html">Centennial – 9/13/2025</a>
+      <a href="Milton_1.html">Milton – 9/17/2025</a>
+    </div>
   </div>
 
 </body>
