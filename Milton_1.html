@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Varsity Game Videos</title>
+  <title>Junior Varsity Game Videos</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -28,7 +28,7 @@
   </style>
 </head>
 <body>
-  <h1>Varsity Game Videos</h1>
+  <h1>Junior Varsity Game Videos</h1>
 
   <div id="videoContainer"></div>
 
@@ -51,7 +51,7 @@
 
       const source = document.createElement('source');
       const padded = String(i).padStart(2, '0'); // ensures 01, 02, etc.
-      source.src = `${folderName}/${videoPrefix} ${padded}.mp4`;
+      source.src = `${folderName}/${videoPrefix}${padded}.mp4`;
       source.type = 'video/mp4';
 
       video.appendChild(source);
