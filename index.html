@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Creekview Grizzlies 8th Grade Football</title>
   <style>
+    /* Ensure html and body take full height and remove default margin */
     html, body {
       height: 100%;
       margin: 0;
@@ -11,72 +12,94 @@
 
     body {
       font-family: Arial, sans-serif;
-      /* white background behind the PNG tiles */
+
+      /* White page background behind PNG tiles */
       background-color: #ffffff;
 
-      /* tiled PNG background */
+      /* PNG tiled background (your small logo/paw) */
       background-image: url('grizzlies_paw.png');
-      background-repeat: repeat;
-      background-position: 0 0;
+      background-repeat: repeat;         /* repeat the PNG across page */
+      background-position: 0 0;         /* start tiling from top-left */
+      background-size: 8vw auto;        /* responsive tile width, keeps aspect ratio */
+      background-attachment: fixed;      /* background stays fixed on scroll */
 
-      /* responsive tile size (keeps aspect ratio) */
-      background-size: 12vw auto;
-
-      background-attachment: fixed;
-
+      /* Flexbox layout to center horizontally, stick content to top */
       display: flex;
-      justify-content: center;
-      align-items: flex-start;  /* stick content to the top */
+      justify-content: center;          /* center horizontally */
+      align-items: flex-start;          /* align top of page */
       min-height: 100vh;
-      padding-top: 80px; /* spacing from top edge */
+      padding-top: 40px;                /* spacing from top edge */
     }
 
+    /* Main container for the content */
     .container {
-      text-align: center;
-      background: #001f4d; /* navy blue container */
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      max-width: 500px;
-      width: 90%;
+      text-align: center;               /* center text inside container */
+      background: #001f4d;              /* navy blue background */
+      padding: 30px;                    /* inner spacing */
+      border-radius: 12px;              /* rounded corners */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* subtle shadow for depth */
+      max-width: 500px;                 /* limit width on large screens */
+      width: 90%;                        /* responsive width for smaller screens */
     }
 
+    /* Page title */
     h1 {
-      margin-bottom: 20px;
-      font-size: 5.5rem;
-      color: #ffffff; /* white title text for contrast */
+      margin-bottom: 20px;              /* spacing below title */
+      font-size: 2.5rem;                /* larger title text */
+      color: #ffffff;                    /* white text for contrast */
+      line-height: 1.2;                  /* better spacing for multi-line titles */
     }
 
+    /* Container for all links/buttons */
     .link-list {
-      display: grid;
-      font-size: 0.5rem;
-      gap: 12px;
+      display: grid;                     /* stack links in grid format */
+      gap: 12px;                         /* spacing between links */
     }
 
+    /* Individual clickable links/buttons */
     .link-list a {
-      display: block;
-      padding: 12px;
-      text-decoration: none;
-      background: #355E3B; /* hunter green links */
-      color: white;
-      font-weight: bold;
-      border-radius: 8px;
-      transition: background 0.3s;
+      display: block;                    /* make links block-level so full width is clickable */
+      padding: 12px;                     /* inner spacing for click area */
+      text-decoration: none;             /* remove underline */
+      background: #355E3B;               /* hunter green background */
+      color: white;                      /* text color */
+      font-weight: bold;                 /* bold text */
+      font-size: 1.2rem;                 /* readable font size for links */
+      border-radius: 8px;                /* rounded corners */
+      transition: background 0.3s;       /* smooth hover transition */
     }
 
+    /* Hover effect for links */
     .link-list a:hover {
-      background: #4C7C50; /* lighter green on hover */
+      background: #4C7C50;               /* slightly lighter green on hover */
+    }
+
+    /* Optional: Responsive adjustments for smaller screens */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2rem;                 /* smaller title on phones */
+      }
+      .link-list a {
+        font-size: 1rem;                 /* slightly smaller links on mobile */
+        padding: 10px;                   /* reduce padding for smaller screens */
+      }
     }
   </style>
 </head>
 <body>
 
+  <!-- Main content container -->
   <div class="container">
+
+    <!-- Page title -->
     <h1>Creekview Grizzlies<br>8th Grade Football</h1>
+
+    <!-- Links to game pages -->
     <div class="link-list">
       <a href="Centennial.html">Centennial – 9/13/2025</a>
       <a href="Milton_1.html">Milton – 9/17/2025</a>
     </div>
+
   </div>
 
 </body>
