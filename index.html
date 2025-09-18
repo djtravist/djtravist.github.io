@@ -4,11 +4,21 @@
   <meta charset="UTF-8" />
   <title>Creekview Grizzlies 8th Grade Football</title>
   <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
     body {
       font-family: Arial, sans-serif;
-      background: #f4f4f9;
-      margin: 0;
-      padding: 0;
+      /* tiled PNG background */
+      background-image: url('grizzlies_head.png');
+      background-repeat: repeat;
+      background-position: 0 0;
+      background-size: 16px 16px; /* adjust tile size here (smaller = denser) */
+      background-attachment: fixed;
+      background-color: #ffffff; /* fallback color */
+      
       display: flex;
       justify-content: center;
       align-items: center;
@@ -17,7 +27,7 @@
 
     .container {
       text-align: center;
-      background: white;
+      background: rgba(255, 255, 255, 0.9); /* slightly transparent white card */
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
