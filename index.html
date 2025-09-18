@@ -11,6 +11,9 @@
 
     body {
       font-family: Arial, sans-serif;
+      /* white background behind the PNG tiles */
+      background-color: #ffffff;
+
       /* tiled PNG background */
       background-image: url('grizzlies_head.png');
       background-repeat: repeat;
@@ -20,12 +23,12 @@
       background-size: 8vw auto;
 
       background-attachment: fixed;
-      background-color: #ffffff;
-      
+
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;  /* stick content to the top */
       min-height: 100vh;
+      padding-top: 40px; /* spacing from top edge */
     }
 
     .container {
