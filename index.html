@@ -15,9 +15,12 @@
       background-image: url('grizzlies_head.png');
       background-repeat: repeat;
       background-position: 0 0;
-      background-size: 16px 16px; /* adjust tile size here (smaller = denser) */
+
+      /* responsive tile size (keeps aspect ratio) */
+      background-size: 8vw auto;
+
       background-attachment: fixed;
-      background-color: #ffffff; /* fallback color */
+      background-color: #ffffff;
       
       display: flex;
       justify-content: center;
@@ -27,7 +30,7 @@
 
     .container {
       text-align: center;
-      background: rgba(255, 255, 255, 0.9); /* slightly transparent white card */
+      background: rgba(255, 255, 255, 0.9); /* slightly transparent card */
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
