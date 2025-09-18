@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Junior Varsity Game Videos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+      padding: 2em;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+    h2 {
+      margin-top: 2em;
+    }
+    video {
+      display: block;
+      margin: 0 auto 2em auto;
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <h1>Junior Varsity Game Videos</h1>
+
+  <div id="videoContainer"></div>
+
+  <script>
+    // ======= CONFIGURATION =======
+const folderName = 'milton_1'; // Folder name
+const videoPrefix = 'Milton_1'; // Used in the actual file path
+const displayTitle = videoPrefix.split('_')[0]; // Removes "_1" for title display
+const totalVideos = 80;
+
+const container = document.getElementById('videoContainer');
+
+for (let i = 1; i <= totalVideos; i++) {
+  const h2 = document.createElement('h2');
+  h2.textContent = `${displayTitle} ${i}`; // Display title without "_1"
+
+  const video = document.createElement('video');
+  video.controls = true;
+  video.width = 640;
+
+  const source = document.createElement('source');
+  const padded = String(i).padStart(2, '0');
+  source.src = `${folderName}/${videoPrefix}${padded}.mp4`;
+  source.type = 'video/mp4';
+
+  video.appendChild(source);
+  video.appendChild(document.createTextNode('Your browser does not support the video tag.'));
+
+  container.appendChild(h2);
+  container.appendChild(video);
+}
+
+  </script>
+</body>
+</html>
