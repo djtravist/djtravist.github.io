@@ -84,9 +84,9 @@
     // 🔼 Get current play count
     db.collection("videoPlays").doc(videoId).get().then((doc) => {
       if (doc.exists) {
-        counter.textContent = `Plays: ${doc.data().count}`;
+        counter.textContent = `Views: ${doc.data().count}`;
       } else {
-        counter.textContent = `Plays: 0`;
+        counter.textContent = `Views: 0`;
       }
     });
 
