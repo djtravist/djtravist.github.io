@@ -97,7 +97,7 @@
         return transaction.get(ref).then((doc) => {
           const newCount = (doc.exists ? doc.data().count : 0) + 1;
           transaction.set(ref, { count: newCount });
-          counter.textContent = `Plays: ${newCount}`;
+          counter.textContent = `Views: ${newCount}`;
         });
       });
     });
