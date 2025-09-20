@@ -4,18 +4,105 @@
   <meta charset="UTF-8" />
   <title>Creekview Grizzlies 8th Grade Football</title>
   <style>
+    /* Ensure html and body take full height and remove default margin */
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+
+      /* White page background behind PNG tiles */
+      background-color: #ffffff;
+
+      /* PNG tiled background (small logo/paw) */
+      background-image: url('grizzlies_paw.png');
+      background-repeat: repeat;         /* repeat the PNG across page */
+      background-position: 0 0;         /* start tiling from top-left */
+      background-size: 12vw auto;        /* responsive tile width, keeps aspect ratio */
+      background-attachment: fixed;     /* background stays fixed on scroll */
+
+      /* Flexbox layout to center horizontally, stick content to top */
+      display: flex;
+      justify-content: center;          /* center horizontally */
+      align-items: flex-start;          /* align top of page */
+      min-height: 100vh;
+      padding-top: 40px;                /* spacing from top edge */
+    }
+
+    /* Main container for the content */
+    .container {
+      text-align: center;               /* center text inside container */
+      background: #001f4d;              /* navy blue background */
+      padding: 30px;                    /* inner spacing */
+      border-radius: 12px;              /* rounded corners */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* subtle shadow for depth */
+      max-width: 500px;                 /* limit width on large screens */
+      width: 90%;                        /* responsive width for smaller screens */
+    }
+
+    /* Page title */
+    h1 {
+      margin-bottom: 20px;              /* spacing below title */
+      font-size: 2.5rem;                /* large, readable title */
+      color: #ffffff;                    /* white text for contrast */
+      line-height: 1.2;                  /* spacing for multi-line titles */
+    }
+
+    /* Container for all links/buttons */
+    .link-list {
+      display: grid;                     /* stack links in grid format */
+      gap: 12px;                         /* spacing between links */
+    }
+
+    /* Individual clickable links/buttons */
     .link-list a {
-      display: block;
-      text-align: left;
-      margin-bottom: 5px;
+      display: block;                    /* full width clickable */
+      padding: 12px;                     /* inner spacing */
+      text-decoration: none;             /* remove underline */
+      background: #355E3B;               /* hunter green background */
+      color: white;                      /* text color */
+      font-weight: bold;                 /* bold text */
+      font-size: 1.5rem;                 /* readable link text */
+      border-radius: 8px;                /* rounded corners */
+      transition: background 0.3s;       /* smooth hover transition */
+    }
+
+    /* Hover effect for links */
+    .link-list a:hover {
+      background: #4C7C50;               /* slightly lighter green on hover */
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2rem;                 /* smaller title on phones */
+      }
+      .link-list a {
+        font-size: 1.2rem;               /* slightly smaller links on mobile */
+        padding: 10px;                   /* reduce padding for smaller screens */
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="link-list">
-    <a href="Centennial.html">Centennial 9-13-2025</a>
-    <a href="Milton_1.html">Milton 9-17-2025</a>
+  <!-- Main content container -->
+  <div class="container">
+
+    <!-- Page title -->
+    <h1>Creekview Grizzlies<br>8th Grade Football</h1>
+
+    <!-- Links to game pages -->
+    <div class="link-list">
+      <a href="Lassiter.html">Lassiter – 8/23/2025 (Coming Soon!)</a>
+      <a href="Cass.html">Cass – 9/6/2025</a>
+      <a href="Centennial.html">Centennial – 9/13/2025</a>
+      <a href="Milton_1.html">Milton – 9/17/2025</a>
+      <a href="Harrison.html">Harrison – 9/20/2025 (Coming Soon!)</a>
+    </div>
+
   </div>
 
 </body>
