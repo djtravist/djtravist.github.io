@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <title>Creekview vs. Centennial - Varsity Game</title>
+
+  <!-- Firebase scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
@@ -9,7 +13,6 @@
       font-family: Arial, sans-serif;
       color: #333;
       padding: 2em;
-
       background-image: url('grizzlies_head.png');
       background-repeat: repeat;
       background-position: 0 0;
@@ -18,14 +21,16 @@
       background-color: transparent;
     }
 
+    /* Clean and specific title styling */
     .page-title h1 {
-      color: #fff;                        /* white text */
-      background-color: #111 !important; /* match your video titles */
-      border: 3px solid #fff !important;  /* white border to stand out */
-      padding: 0.75em 1.5em;               /* plenty of space around text */
+      color: #fff;                        /* White text */
+      background-color: #111 !important; /* Solid black background */
+      border: 3px solid #fff !important; /* White border */
+      padding: 0.75em 1.5em;
       border-radius: 6px;
       display: inline-block;
       font-size: 2em;
+      font-weight: bold;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
     }
 
@@ -46,11 +51,11 @@
       font-size: 1.2em;
       font-weight: bold;
       color: #fff;
-      border: 2px solid #000; 
-      background-color: #111; 
-      padding: 0.5em 1em; 
+      border: 2px solid #000;
+      background-color: #111;
+      padding: 0.5em 1em;
       border-radius: 6px;
-      display: inline-block;  
+      display: inline-block;
     }
 
     video {
@@ -65,7 +70,7 @@
 
     .video-views {
       text-align: right;
-      font-size: 0.4em;
+      font-size: 0.8em;
       margin-top: 0.3em;
       color: #ccc;
     }
@@ -73,23 +78,26 @@
 </head>
 
 <body>
-  <!-- Page title wrapper -->
+  <!-- Password prompt -->
+  <script>
+    var password = prompt("Enter password:");
+    if (password !== "5080") {
+      document.body.innerHTML = "<h1 style='color:red;'>Access Denied</h1>";
+      throw new Error("Access Denied");
+    }
+  </script>
+
+  <!-- Page title -->
   <div class="page-title">
     <h1>Creekview vs. Centennial Varsity 9/13/2025</h1>
   </div>
 
+  <!-- Container for videos -->
   <div id="videoContainer"></div>
 
+  <!-- Firebase script -->
   <script>
-    var password = prompt("Enter password:");
-    if (password !== "5080") {
-      document.body.innerHTML = "<h1>Access Denied</h1>";
-      throw new Error("Access Denied"); // Prevents rest of the scripts from running
-    }
-  </script>
-
-  <script>
-    // ✅ Firebase config
+    // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyBPJGqsH_pLXffDt6ol3SOxgC9joKUdKm4",
       authDomain: "footballvideocounter.firebaseapp.com",
@@ -146,23 +154,27 @@
         counter.textContent = 'Views: N/A';
       });
 
-      video.addEventListener('play', () => {
-        const ref = db.collection("videoPlays").doc(videoId);
-        db.runTransaction((transaction) => {
-          return transaction.get(ref).then((doc) => {
-            const newCount = (doc.exists ? doc.data().count : 0) + 1;
-            transaction.set(ref, { count: newCount });
-            counter.textContent = `Views: ${newCount}`;
+      // Count only when video plays for 5+ seconds
+      let playedFor5Sec = false;
+      video.addEventListener('timeupdate', () => {
+        if (!playedFor5Sec && video.currentTime >= 5) {
+          playedFor5Sec = true;
+          const ref = db.collection("videoPlays").doc(videoId);
+          db.runTransaction((transaction) => {
+            return transaction.get(ref).then((doc) => {
+              const newCount = (doc.exists ? doc.data().count : 0) + 1;
+              transaction.set(ref, { count: newCount });
+              counter.textContent = `Views: ${newCount}`;
+            });
+          }).catch((err) => {
+            console.error("Error incrementing view count for", videoId, err);
           });
-        }).catch((err) => {
-          console.error("Error incrementing view count for", videoId, err);
-        });
+        }
       });
 
       wrapper.appendChild(title);
       wrapper.appendChild(video);
       wrapper.appendChild(counter);
-
       container.appendChild(wrapper);
     }
   </script>
