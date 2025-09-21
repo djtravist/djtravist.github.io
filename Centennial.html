@@ -3,90 +3,93 @@
 <head>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-  
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    color: #333;
-    padding: 2em;
 
-    background-image: url('grizzlies_head.png');
-    background-repeat: repeat;
-    background-position: 0 0;
-    background-size: 12vw auto;
-    background-attachment: fixed;
-    background-color: transparent; /* OR remove this line */
-    
-    text-align: center;
-  }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #333;
+      padding: 2em;
 
-  h1 {
-    color: #fff;                /* White text */
-    border: 2px solid #000;     /* Black border */
-    background-color: #000;     /* Black background */
-    padding: 0.5em 1em;
-    border-radius: 6px;
-    display: inline-block;      /* Tight border wrap */
-    margin: 0 auto 1em;         /* Center with margin bottom */
-    text-align: center;
-  }
+      background-image: url('grizzlies_head.png');
+      background-repeat: repeat;
+      background-position: 0 0;
+      background-size: 12vw auto;
+      background-attachment: fixed;
+      background-color: transparent;
+    }
 
-  .video-wrapper {
-    background-color: #000;
-    color: #fff;
-    display: block;
-    max-width: 640px;
-    margin: 2em auto;
-    text-align: center;
-    padding: 1em;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  }
+    .page-title {
+      text-align: center;
+      margin-bottom: 2em;
+    }
 
-  .video-title {
-    margin-bottom: 0.5em;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #fff;
-    border: 2px solid #000; 
-    background-color: #111; 
-    padding: 0.5em 1em; 
-    border-radius: 6px;
-    display: inline-block;  
-  }
+    h1 {
+      color: #fff;                /* White text */
+      border: 2px solid #000;     /* Black border */
+      background-color: #000;     /* Black background */
+      padding: 0.5em 1em;
+      border-radius: 6px;
+      display: inline-block;
+    }
 
-  video {
-    display: block;
-    width: 100%;
-    max-width: 640px;
-    height: auto;
-    border: 1px solid #ccc;
-    background: #000;
-    margin: 0 auto;
-  }
+    .video-wrapper {
+      background-color: #000;
+      color: #fff;
+      display: block;
+      max-width: 640px;
+      margin: 2em auto;
+      text-align: center;
+      padding: 1em;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
 
-  .video-views {
-    text-align: right;
-    font-size: 0.4em;
-    margin-top: 0.3em;
-    color: #ccc;
-  }
-</style>
-  
+    .video-title {
+      margin-bottom: 0.5em;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #fff;
+      border: 2px solid #000; 
+      background-color: #111; 
+      padding: 0.5em 1em; 
+      border-radius: 6px;
+      display: inline-block;  
+    }
+
+    video {
+      display: block;
+      width: 100%;
+      max-width: 640px;
+      height: auto;
+      border: 1px solid #ccc;
+      background: #000;
+      margin: 0 auto;
+    }
+
+    .video-views {
+      text-align: right;
+      font-size: 0.4em;
+      margin-top: 0.3em;
+      color: #ccc;
+    }
+  </style>
 </head>
-  
+
 <body>
-  <h1>Creekview vs. Centennial Varsity 9/13/2025</h1>
+  <!-- Page title wrapper -->
+  <div class="page-title">
+    <h1>Creekview vs. Centennial Varsity 9/13/2025</h1>
+  </div>
 
   <div id="videoContainer"></div>
 
   <script>
-  var password = prompt("Enter password:");
-  if (password !== "5080") {
-    document.body.innerHTML = "<h1>Access Denied</h1>";
-  }
+    var password = prompt("Enter password:");
+    if (password !== "5080") {
+      document.body.innerHTML = "<h1>Access Denied</h1>";
+    }
   </script>
-  
+
   <script>
     // ✅ Firebase config
     const firebaseConfig = {
@@ -133,7 +136,7 @@
       counter.className = 'video-views';
       counter.textContent = `Loading views...`;
 
-      // fetch view count
+      // Fetch view count
       db.collection("videoPlays").doc(videoId).get().then((doc) => {
         if (doc.exists) {
           counter.textContent = `Views: ${doc.data().count}`;
