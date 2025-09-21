@@ -3,60 +3,70 @@
 <head>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    color: #333;
+    padding: 2em;
 
-  <meta charset="UTF-8" />
-  <title>Creekview vs. Centennial Varsity 9/13/2025</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      color: #333;
-      padding: 2em;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 1em;
-    }
+    background-image: url('grizzlies_head.png');
+    background-repeat: repeat;
+    background-position: 0 0;
+    background-size: 12vw auto;
+    background-attachment: fixed;
+    background-color: transparent; /* OR remove this line */
+  }
 
-    /* ✅ One block per row, centered */
-    .video-wrapper {
-      display: block;
-      max-width: 640px;   /* match video width */
-      margin: 2em auto;   /* centers the whole block */
-      text-align: center; /* centers the title */
-    }
+  h1 {
+    text-align: center;
+    margin-bottom: 1em;
+  }
 
-    .video-title {
-      margin-bottom: 0.5em;
-      font-size: 1.2em;
-      font-weight: bold;
-      color: #333;
-    }
+  .video-wrapper {
+    display: block;
+    max-width: 640px;
+    margin: 2em auto;
+    text-align: center;
+  }
 
-    video {
-      display: block;
-      width: 100%;        /* responsive */
-      max-width: 640px;   /* limit width */
-      height: auto;
-      border: 1px solid #ccc;
-      background: #000;
-      margin: 0 auto;
-    }
+  .video-title {
+    margin-bottom: 0.5em;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+  }
 
-    .video-views {
-      text-align: right;  /* right-aligned under video */
-      font-size: 0.4em;
-      color: #666;
-      margin-top: 0.3em;
-    }
-  </style>
-</head>
+  video {
+    display: block;
+    width: 100%;
+    max-width: 640px;
+    height: auto;
+    border: 1px solid #ccc;
+    background: #000;
+    margin: 0 auto;
+  }
+
+  .video-views {
+    text-align: right;
+    font-size: 0.4em;
+    color: #666;
+    margin-top: 0.3em;
+  }
+</style>
 
 <body>
   <h1>Creekview vs. Centennial Varsity 9/13/2025</h1>
 
   <div id="videoContainer"></div>
 
+  <script>
+  var password = prompt("Enter password:");
+  if (password !== "5080") {
+    document.body.innerHTML = "<h1>Access Denied</h1>";
+  }
+  </script>
+  
   <script>
     // ✅ Firebase config
     const firebaseConfig = {
