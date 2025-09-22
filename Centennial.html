@@ -21,18 +21,14 @@
       background-color: transparent;
     }
 
-    /* Center the page title container */
     .page-title {
       text-align: center;
       margin-bottom: 2em;
     }
 
-    /* Clean and specific title styling */
     .page-title h1 {
       color: #fff;
       background-color: #000 !important;
-      border: none !important;
-      outline: none;
       padding: 0.75em 1.5em;
       border-radius: 6px;
       display: inline-block;
@@ -55,16 +51,16 @@
 
     .video-title {
       margin: 0.5em auto;
-      font-size: 1.4em;         /* larger than views */
+      font-size: 1.4em;         
       font-weight: bold;
       color: #fff;
       border: 2px solid #000;
       background-color: #111;
       padding: 0.5em 1em;
       border-radius: 6px;
-      display: block;           /* so width works */
-      width: 50%;               /* half video width */
-      text-align: center;       /* center text */
+      display: block;           
+      width: 50%;               
+      text-align: center;       
     }
 
     video {
@@ -79,7 +75,7 @@
 
     .video-views {
       text-align: right;
-      font-size: 0.7em;         /* small text */
+      font-size: 0.7em;         
       margin-top: 0.3em;
       color: #ccc;
     }
@@ -87,103 +83,100 @@
 </head>
 
 <body>
-  <!-- Password prompt -->
   <script>
-  var password = prompt("Enter password:");
-  if (password !== "5080") {
-    document.body.innerHTML = "<h1>Access Denied</h1>";
-  }
-  </script>
+    // Ask for password BEFORE showing anything
+    var password = prompt("Enter password:");
 
-  <!-- Page title -->
-  <div class="page-title">
-    <h1>Creekview vs. Centennial Varsity 9/13/2025</h1>
-  </div>
+    if (password !== "5080") {
+      document.write("<h1 style='color:red; text-align:center;'>Access Denied</h1>");
+    } else {
+      // If password is correct, render protected content
+      document.write(`
+        <div class="page-title">
+          <h1>Creekview vs. Centennial Varsity 9/13/2025</h1>
+        </div>
+        <div id="videoContainer"></div>
+      `);
 
-  <!-- Container for videos -->
-  <div id="videoContainer"></div>
+      // Initialize Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyBPJGqsH_pLXffDt6ol3SOxgC9joKUdKm4",
+        authDomain: "footballvideocounter.firebaseapp.com",
+        projectId: "footballvideocounter",
+        storageBucket: "footballvideocounter.firebasestorage.app",
+        messagingSenderId: "126776947656",
+        appId: "1:126776947656:web:cf05806375edaa3c27c6fd"
+      };
 
-  <!-- Firebase script -->
-  <script>
-    // Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyBPJGqsH_pLXffDt6ol3SOxgC9joKUdKm4",
-      authDomain: "footballvideocounter.firebaseapp.com",
-      projectId: "footballvideocounter",
-      storageBucket: "footballvideocounter.firebasestorage.app",
-      messagingSenderId: "126776947656",
-      appId: "1:126776947656:web:cf05806375edaa3c27c6fd"
-    };
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+      const folderName = 'centennial';
+      const videoPrefix = 'Centennial';
+      const totalVideos = 69;
 
-    const folderName = 'centennial';
-    const videoPrefix = 'Centennial';
-    const totalVideos = 69;
+      const container = document.getElementById('videoContainer');
 
-    const container = document.getElementById('videoContainer');
+      for (let i = 1; i <= totalVideos; i++) {
+        const padded = String(i).padStart(2, '0');
+        const videoId = \`\${videoPrefix}_\${padded}\`;
 
-    for (let i = 1; i <= totalVideos; i++) {
-      const padded = String(i).padStart(2, '0');
-      const videoId = `${videoPrefix}_${padded}`;
-      console.log("Processing video:", videoId);
+        const wrapper = document.createElement('div');
+        wrapper.className = 'video-wrapper';
 
-      const wrapper = document.createElement('div');
-      wrapper.className = 'video-wrapper';
+        const title = document.createElement('div');
+        title.className = 'video-title';
+        title.textContent = \`\${videoPrefix} \${i}\`;
 
-      const title = document.createElement('div');
-      title.className = 'video-title';
-      title.textContent = `${videoPrefix} ${i}`;
+        const video = document.createElement('video');
+        video.controls = true;
 
-      const video = document.createElement('video');
-      video.controls = true;
+        const source = document.createElement('source');
+        source.src = \`\${folderName}/\${videoId}.mp4\`;
+        source.type = 'video/mp4';
 
-      const source = document.createElement('source');
-      source.src = `${folderName}/${videoId}.mp4`;
-      source.type = 'video/mp4';
+        video.appendChild(source);
+        video.appendChild(document.createTextNode('Your browser does not support the video tag.'));
 
-      video.appendChild(source);
-      video.appendChild(document.createTextNode('Your browser does not support the video tag.'));
+        const counter = document.createElement('div');
+        counter.className = 'video-views';
+        counter.textContent = \`Loading views...\`;
 
-      const counter = document.createElement('div');
-      counter.className = 'video-views';
-      counter.textContent = `Loading views...`;
+        // Fetch view count
+        db.collection("videoPlays").doc(videoId).get().then((doc) => {
+          if (doc.exists) {
+            counter.textContent = \`Views: \${doc.data().count}\`;
+          } else {
+            counter.textContent = \`Views: 0\`;
+          }
+        }).catch((err) => {
+          console.error("Error fetching view count for", videoId, err);
+          counter.textContent = 'Views: N/A';
+        });
 
-      // Fetch view count
-      db.collection("videoPlays").doc(videoId).get().then((doc) => {
-        if (doc.exists) {
-          counter.textContent = `Views: ${doc.data().count}`;
-        } else {
-          counter.textContent = `Views: 0`;
-        }
-      }).catch((err) => {
-        console.error("Error fetching view count for", videoId, err);
-        counter.textContent = 'Views: N/A';
-      });
-
-      // Count only when video plays for 5+ seconds
-      let playedFor5Sec = false;
-      video.addEventListener('timeupdate', () => {
-        if (!playedFor5Sec && video.currentTime >= 5) {
-          playedFor5Sec = true;
-          const ref = db.collection("videoPlays").doc(videoId);
-          db.runTransaction((transaction) => {
-            return transaction.get(ref).then((doc) => {
-              const newCount = (doc.exists ? doc.data().count : 0) + 1;
-              transaction.set(ref, { count: newCount });
-              counter.textContent = `Views: ${newCount}`;
+        // Increment only if watched for 5+ seconds
+        let playedFor5Sec = false;
+        video.addEventListener('timeupdate', () => {
+          if (!playedFor5Sec && video.currentTime >= 5) {
+            playedFor5Sec = true;
+            const ref = db.collection("videoPlays").doc(videoId);
+            db.runTransaction((transaction) => {
+              return transaction.get(ref).then((doc) => {
+                const newCount = (doc.exists ? doc.data().count : 0) + 1;
+                transaction.set(ref, { count: newCount });
+                counter.textContent = \`Views: \${newCount}\`;
+              });
+            }).catch((err) => {
+              console.error("Error incrementing view count for", videoId, err);
             });
-          }).catch((err) => {
-            console.error("Error incrementing view count for", videoId, err);
-          });
-        }
-      });
+          }
+        });
 
-      wrapper.appendChild(title);
-      wrapper.appendChild(video);
-      wrapper.appendChild(counter);
-      container.appendChild(wrapper);
+        wrapper.appendChild(title);
+        wrapper.appendChild(video);
+        wrapper.appendChild(counter);
+        container.appendChild(wrapper);
+      }
     }
   </script>
 </body>
