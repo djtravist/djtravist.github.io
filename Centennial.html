@@ -51,16 +51,23 @@
 
     .video-title {
       margin: 0.5em auto;
-      font-size: 1.4em;         
+      font-size: 1.6em;         /* clearly bigger */
       font-weight: bold;
       color: #fff;
       border: 2px solid #000;
       background-color: #111;
       padding: 0.5em 1em;
       border-radius: 6px;
-      display: block;           
-      width: 50%;               
-      text-align: center;       
+      display: block;
+      width: 50%;               /* half video width */
+      text-align: center;
+    }
+
+    .video-views {
+      text-align: right;
+      font-size: 0.85em;        /* smaller than title */
+      margin-top: 0.3em;
+      color: #ccc;
     }
 
     video {
@@ -73,11 +80,15 @@
       margin: 0 auto;
     }
 
-    .video-views {
-      text-align: right;
-      font-size: 0.7em;         
-      margin-top: 0.3em;
-      color: #ccc;
+    /* Responsive scaling for phones */
+    @media (max-width: 768px) {
+      .video-title {
+        font-size: 1.8em;       /* even bigger on small screens */
+        width: 80%;             /* more width so it fits */
+      }
+      .video-views {
+        font-size: 0.9em;       /* still smaller */
+      }
     }
   </style>
 </head>
@@ -119,20 +130,20 @@
 
       for (let i = 1; i <= totalVideos; i++) {
         const padded = String(i).padStart(2, '0');
-        const videoId = \`\${videoPrefix}_\${padded}\`;
+        const videoId = `${videoPrefix}_${padded}`;
 
         const wrapper = document.createElement('div');
         wrapper.className = 'video-wrapper';
 
         const title = document.createElement('div');
         title.className = 'video-title';
-        title.textContent = \`\${videoPrefix} \${i}\`;
+        title.textContent = `${videoPrefix} ${i}`;
 
         const video = document.createElement('video');
         video.controls = true;
 
         const source = document.createElement('source');
-        source.src = \`\${folderName}/\${videoId}.mp4\`;
+        source.src = `${folderName}/${videoId}.mp4`;
         source.type = 'video/mp4';
 
         video.appendChild(source);
@@ -140,14 +151,14 @@
 
         const counter = document.createElement('div');
         counter.className = 'video-views';
-        counter.textContent = \`Loading views...\`;
+        counter.textContent = `Loading views...`;
 
         // Fetch view count
         db.collection("videoPlays").doc(videoId).get().then((doc) => {
           if (doc.exists) {
-            counter.textContent = \`Views: \${doc.data().count}\`;
+            counter.textContent = `Views: ${doc.data().count}`;
           } else {
-            counter.textContent = \`Views: 0\`;
+            counter.textContent = `Views: 0`;
           }
         }).catch((err) => {
           console.error("Error fetching view count for", videoId, err);
@@ -164,7 +175,7 @@
               return transaction.get(ref).then((doc) => {
                 const newCount = (doc.exists ? doc.data().count : 0) + 1;
                 transaction.set(ref, { count: newCount });
-                counter.textContent = \`Views: \${newCount}\`;
+                counter.textContent = `Views: ${newCount}`;
               });
             }).catch((err) => {
               console.error("Error incrementing view count for", videoId, err);
