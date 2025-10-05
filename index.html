@@ -5,6 +5,11 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Creekview Grizzlies 8th Grade Football</title>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
   <style>
     html, body {
       height: 100%;
@@ -35,6 +40,7 @@
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       max-width: 500px;
       width: 90%;
+      position: relative;
     }
 
     h1 {
@@ -66,9 +72,17 @@
       transform: scale(1.03);
     }
 
+    .views-counter {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 0.75rem;
+      color: #ccc;
+    }
+
     @media (max-width: 768px) {
       body {
-        background-attachment: scroll; /* improves performance on mobile */
+        background-attachment: scroll;
       }
     }
 
@@ -76,6 +90,7 @@
       h1 {
         font-size: 2rem;
       }
+
       .link-list a {
         font-size: 1.2rem;
         padding: 10px;
@@ -96,6 +111,41 @@
       <a href="Woodstock.html">Woodstock – 10/1/2025 JV</a>
       <a href="Calhoun.html">Calhoun - 10/4/2025 Varsity</a>
     </div>
+
+    <div class="views-counter" id="viewCounter">Loading views...</div>
   </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBPJGqsH_pLXffDt6ol3SOxgC9joKUdKm4",
+      authDomain: "footballvideocounter.firebaseapp.com",
+      projectId: "footballvideocounter",
+      storageBucket: "footballvideocounter.appspot.com",
+      messagingSenderId: "126776947656",
+      appId: "1:126776947656:web:cf05806375edaa3c27c6fd"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const id = "IndexPage";
+    const counter = document.getElementById("viewCounter");
+
+    db.collection("videoPlays").doc(id).get().then((doc) => {
+      const count = doc.exists ? doc.data().count : 0;
+      counter.textContent = `Views: ${count}`;
+    }).catch(() => {
+      counter.textContent = "Views: N/A";
+    });
+
+    db.runTransaction((tx) => {
+      const ref = db.collection("videoPlays").doc(id);
+      return tx.get(ref).then((doc) => {
+        const count = (doc.exists ? doc.data().count : 0) + 1;
+        tx.set(ref, { count });
+        counter.textContent = `Views: ${count}`;
+      });
+    }).catch(console.error);
+  </script>
 </body>
 </html>
