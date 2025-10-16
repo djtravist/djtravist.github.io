@@ -151,8 +151,7 @@
         // ✅ Updated view counter — counts every view after 2 seconds
         let counted = false;
         video.addEventListener('timeupdate', () => {
-          if (!counted && video.currentTime >= 2) {
-            counted = true;
+          if (video.currentTime >= 2) {
             const ref = db.collection("videoPlays").doc(id);
 
             db.runTransaction(async (tx) => {
@@ -161,16 +160,16 @@
                 const count = doc.data().count + 1;
                 tx.update(ref, { count });
                 views.textContent = `Views: ${count}`;
-              } else {
-                tx.set(ref, { count: 1 });
-                views.textContent = `Views: 1`;
-              }
-            }).catch((err) => {
-              console.error("Error updating views:", err);
-              views.textContent = "Views: N/A";
-            });
+          } else {
+            tx.set(ref, { count: 1 });
+            views.textContent = `Views: 1`;
           }
+        }).catch((err) => {
+          console.error("Error updating views:", err);
+          views.textContent = "Views: N/A";
         });
+      }
+    });
 
         wrapper.appendChild(title);
         wrapper.appendChild(video);
