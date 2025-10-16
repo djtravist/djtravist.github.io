@@ -148,18 +148,27 @@
           views.textContent = 'Views: N/A';
         });
 
+        // ✅ Updated view counter — counts every view after 2 seconds
         let counted = false;
         video.addEventListener('timeupdate', () => {
-          if (!counted && video.currentTime >= 5) {
+          if (!counted && video.currentTime >= 2) {
             counted = true;
             const ref = db.collection("videoPlays").doc(id);
-            db.runTransaction((tx) => {
-              return tx.get(ref).then((doc) => {
-                const count = (doc.exists ? doc.data().count : 0) + 1;
-                tx.set(ref, { count });
+
+            db.runTransaction(async (tx) => {
+              const doc = await tx.get(ref);
+              if (doc.exists) {
+                const count = doc.data().count + 1;
+                tx.update(ref, { count });
                 views.textContent = `Views: ${count}`;
-              });
-            }).catch(console.error);
+              } else {
+                tx.set(ref, { count: 1 });
+                views.textContent = `Views: 1`;
+              }
+            }).catch((err) => {
+              console.error("Error updating views:", err);
+              views.textContent = "Views: N/A";
+            });
           }
         });
 
