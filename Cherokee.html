@@ -142,16 +142,24 @@
         views.className = 'video-views';
         views.textContent = `Loading views...`;
 
+        // Load initial view count
         db.collection("videoPlays").doc(id).get().then((doc) => {
           views.textContent = `Views: ${doc.exists ? doc.data().count : 0}`;
         }).catch(() => {
           views.textContent = 'Views: N/A';
         });
 
-        // ✅ Updated view counter — counts every view after 2 seconds
+        // ✅ Count once per playback after 2 seconds
         let counted = false;
+
+        // Reset counter for each new play
+        video.addEventListener('play', () => {
+          counted = false;
+        });
+
         video.addEventListener('timeupdate', () => {
-          if (video.currentTime >= 2) {
+          if (!counted && video.currentTime >= 2) {
+            counted = true;
             const ref = db.collection("videoPlays").doc(id);
 
             db.runTransaction(async (tx) => {
@@ -160,16 +168,16 @@
                 const count = doc.data().count + 1;
                 tx.update(ref, { count });
                 views.textContent = `Views: ${count}`;
-          } else {
-            tx.set(ref, { count: 1 });
-            views.textContent = `Views: 1`;
+              } else {
+                tx.set(ref, { count: 1 });
+                views.textContent = `Views: 1`;
+              }
+            }).catch((err) => {
+              console.error("Error updating views:", err);
+              views.textContent = "Views: N/A";
+            });
           }
-        }).catch((err) => {
-          console.error("Error updating views:", err);
-          views.textContent = "Views: N/A";
         });
-      }
-    });
 
         wrapper.appendChild(title);
         wrapper.appendChild(video);
