@@ -173,20 +173,29 @@
           counter.textContent = 'Views: N/A';
         });
 
-        // Increment only if watched for 5+ seconds
-        let playedFor5Sec = false;
+        // Reset counter for each new play
+        video.addEventListener('play', () => {
+          counted = false;
+        });
+
         video.addEventListener('timeupdate', () => {
-          if (!playedFor5Sec && video.currentTime >= 5) {
-            playedFor5Sec = true;
-            const ref = db.collection("videoPlays").doc(videoId);
-            db.runTransaction((transaction) => {
-              return transaction.get(ref).then((doc) => {
-                const newCount = (doc.exists ? doc.data().count : 0) + 1;
-                transaction.set(ref, { count: newCount });
-                counter.textContent = `Views: ${newCount}`;
-              });
+          if (!counted && video.currentTime >= 2) {
+            counted = true;
+            const ref = db.collection("videoPlays").doc(id);
+
+            db.runTransaction(async (tx) => {
+              const doc = await tx.get(ref);
+              if (doc.exists) {
+                const count = doc.data().count + 1;
+                tx.update(ref, { count });
+                views.textContent = `Views: ${count}`;
+              } else {
+                tx.set(ref, { count: 1 });
+                views.textContent = `Views: 1`;
+              }
             }).catch((err) => {
-              console.error("Error incrementing view count for", videoId, err);
+              console.error("Error updating views:", err);
+              views.textContent = "Views: N/A";
             });
           }
         });
