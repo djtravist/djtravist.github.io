@@ -117,74 +117,70 @@
       const total = 86;
       const container = document.getElementById('videoContainer');
 
-      for (let i = 1; i <= total; i++) {
-        const num = String(i).padStart(2, '0');
-        const id = `${prefix}_${num}`;
+for (let i = 1; i <= total; i++) {
+  const num = String(i).padStart(2, '0');
+  const id = `${prefix}_${num}`;
+  let counted = false; // <— declare inside loop, unique to each video
 
-        const wrapper = document.createElement('div');
-        wrapper.className = 'video-wrapper';
+  const wrapper = document.createElement('div');
+  wrapper.className = 'video-wrapper';
 
-        const title = document.createElement('div');
-        title.className = 'video-title';
-        title.textContent = `${prefix} ${i}`;
+  const title = document.createElement('div');
+  title.className = 'video-title';
+  title.textContent = `${prefix} ${i}`;
 
-        const video = document.createElement('video');
-        video.controls = true;
+  const video = document.createElement('video');
+  video.controls = true;
 
-        const source = document.createElement('source');
-        source.src = `${folder}/${id}.mp4`;
-        source.type = 'video/mp4';
+  const source = document.createElement('source');
+  source.src = `${folder}/${id}.mp4`;
+  source.type = 'video/mp4';
 
-        video.appendChild(source);
-        video.appendChild(document.createTextNode('Your browser does not support the video tag.'));
+  video.appendChild(source);
+  video.appendChild(document.createTextNode('Your browser does not support the video tag.'));
 
-        const views = document.createElement('div');
-        views.className = 'video-views';
-        views.textContent = `Loading views...`;
+  const views = document.createElement('div');
+  views.className = 'video-views';
+  views.textContent = `Loading views...`;
 
-        // Load initial view count
-        db.collection("videoPlays").doc(id).get().then((doc) => {
-          views.textContent = `Views: ${doc.exists ? doc.data().count : 0}`;
-        }).catch(() => {
-          views.textContent = 'Views: N/A';
-        });
+  db.collection("videoPlays").doc(id).get().then((doc) => {
+    views.textContent = `Views: ${doc.exists ? doc.data().count : 0}`;
+  }).catch(() => {
+    views.textContent = 'Views: N/A';
+  });
 
-        // ✅ Count once per playback after 2 seconds
-        let counted = false;
+  video.addEventListener('play', () => {
+    counted = false; // reset for that specific video
+  });
 
-        // Reset counter for each new play
-        video.addEventListener('play', () => {
-          counted = false;
-        });
+  video.addEventListener('timeupdate', () => {
+    if (!counted && video.currentTime >= 2) {
+      counted = true;
+      const ref = db.collection("videoPlays").doc(id);
 
-        video.addEventListener('timeupdate', () => {
-          if (!counted && video.currentTime >= 2) {
-            counted = true;
-            const ref = db.collection("videoPlays").doc(id);
-
-            db.runTransaction(async (tx) => {
-              const doc = await tx.get(ref);
-              if (doc.exists) {
-                const count = doc.data().count + 1;
-                tx.update(ref, { count });
-                views.textContent = `Views: ${count}`;
-              } else {
-                tx.set(ref, { count: 1 });
-                views.textContent = `Views: 1`;
-              }
-            }).catch((err) => {
-              console.error("Error updating views:", err);
-              views.textContent = "Views: N/A";
-            });
-          }
-        });
-
-        wrapper.appendChild(title);
-        wrapper.appendChild(video);
-        wrapper.appendChild(views);
-        container.appendChild(wrapper);
-      }
+      db.runTransaction(async (tx) => {
+        const doc = await tx.get(ref);
+        if (doc.exists) {
+          const count = doc.data().count + 1;
+          tx.update(ref, { count });
+          views.textContent = `Views: ${count}`;
+        } else {
+          tx.set(ref, { count: 1 });
+          views.textContent = `Views: 1`;
+        }
+      }).catch((err) => {
+        console.error("Error updating views:", err);
+        views.textContent = "Views: N/A";
+      });
     }
-  </script>
+  });
+
+  wrapper.appendChild(title);
+  wrapper.appendChild(video);
+  wrapper.appendChild(views);
+  container.appendChild(wrapper);
+}
+ }
+</script>
 </body>
 </html>
