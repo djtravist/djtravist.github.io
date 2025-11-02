@@ -101,6 +101,7 @@
 <body>
   <div class="container" role="main" aria-label="Creekview Grizzlies Football Links">
     <h1>Creekview Grizzlies<br>8th Grade Football</h1>
+
     <div class="link-list">
       <a href="Woodstock.html">Woodstock – 10/1/2025 JV</a>
       <a href="Calhoun.html">Calhoun - 10/4/2025 Varsity</a>
@@ -115,6 +116,7 @@
   </div>
 
   <script>
+    // --- Firebase Config ---
     const firebaseConfig = {
       apiKey: "AIzaSyBPJGqsH_pLXffDt6ol3SOxgC9joKUdKm4",
       authDomain: "footballvideocounter.firebaseapp.com",
@@ -124,27 +126,39 @@
       appId: "1:126776947656:web:cf05806375edaa3c27c6fd"
     };
 
+    // --- Initialize Firebase ---
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
     const id = "IndexPage";
     const counter = document.getElementById("viewCounter");
+    counter.textContent = "Loading views...";
 
-    db.collection("videoPlays").doc(id).get().then((doc) => {
-      const count = doc.exists ? doc.data().count : 0;
-      counter.textContent = `Views: ${count}`;
-    }).catch(() => {
+    // --- Increment view count once per page load ---
+    db.runTransaction(async (tx) => {
+      const ref = db.collection("videoPlays").doc(id);
+      const doc = await tx.get(ref);
+      const newCount = (doc.exists ? doc.data().count : 0) + 1;
+      tx.set(ref, { count: newCount });
+      return newCount;
+    })
+    .then((newCount) => {
+      // Temporary update until real-time listener takes over
+      counter.textContent = `Views: ${newCount}`;
+    })
+    .catch((err) => {
+      console.error("Transaction failed:", err);
       counter.textContent = "Views: N/A";
     });
 
-    db.runTransaction((tx) => {
-      const ref = db.collection("videoPlays").doc(id);
-      return tx.get(ref).then((doc) => {
-        const count = (doc.exists ? doc.data().count : 0) + 1;
-        tx.set(ref, { count });
-        counter.textContent = `Views: ${count}`;
-      });
-    }).catch(console.error);
+    // --- Real-time live updates ---
+    db.collection("videoPlays").doc(id).onSnapshot((doc) => {
+      if (doc.exists) {
+        counter.textContent = `Views: ${doc.data().count}`;
+      } else {
+        counter.textContent = "Views: 0";
+      }
+    });
   </script>
 </body>
 </html>
